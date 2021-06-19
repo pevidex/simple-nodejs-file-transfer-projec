@@ -4,20 +4,27 @@ import { Readable } from "stream";
 import { IMediaFile } from "../../api/models/MediaFile";
 import { FileUploadError } from "./classes";
 import { FileArgs } from "./fileUtils";
+import { collectGarbage } from "./garbageCollector";
+import { createHash } from "crypto";
+import { markFileToBeDeleted } from "../db/mongoDbService";
 
-export const uploadFile = function (
+export const uploadFileToLocalDisk = function (
   readStream: Readable,
   file: IMediaFile
-): Promise<undefined | FileUploadError> {
+): Promise<string> {
   return new Promise(function (resolve, reject) {
     if (file.path === undefined) {
       console.error("File path not specified");
       return reject(new FileUploadError("File path not specified"));
     }
     const stream = fs.createWriteStream(file.path);
+    const md5sum = createHash("md5");
 
     stream.on("finish", () => {
-      return resolve(undefined);
+      return resolve(md5sum.digest("hex"));
+    });
+    readStream.on("data", (data) => {
+      md5sum.update(data);
     });
     stream.on("error", (error) => {
       console.error(
@@ -29,8 +36,9 @@ export const uploadFile = function (
   });
 };
 
-export const doesFileHashMatch = async (file: IMediaFile): Promise<boolean> => {
-  // todo
+export const abortFileUpload = async (file: IMediaFile): Promise<boolean> => {
+  const x = markFileToBeDeleted(file.id, true);
+  collectGarbage(file);
   return true;
 };
 

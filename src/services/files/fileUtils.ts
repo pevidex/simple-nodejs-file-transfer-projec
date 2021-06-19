@@ -1,3 +1,4 @@
+import fs from "fs";
 
 export interface FileArgs {
     fileName : string;
@@ -12,4 +13,12 @@ export const isFileArgs = (args: unknown) : args is FileArgs => {
     fileArgs.fileHash !== undefined && typeof fileArgs.fileHash === "string" && 
     fileArgs.fileSize !== undefined && !isNaN(fileArgs.fileSize) && 
     fileArgs.fileExtension !== undefined && typeof fileArgs.fileExtension === "string";
+}
+
+export const deleteFileFromFileSystem = (path: string) => {
+    try {
+        fs.unlinkSync(path)
+      } catch(err) {
+        console.error(err)
+      }
 }

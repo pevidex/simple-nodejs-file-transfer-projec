@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from './src/api/routes/uploadRoutes'; //importing route
+import routes from './src/api/routes/mediaCloudRoutes'; //importing route
 import {initDbService} from './src/services/db/mongoDbService'
 
 const app = express(),

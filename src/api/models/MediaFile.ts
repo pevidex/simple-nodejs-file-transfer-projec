@@ -12,12 +12,15 @@ export interface IMediaFile {
   path: string;
   rowCreationDate?: Date;
   uploadDate?: Date;
+  deletionDate?: Date;
+  lastAccessDate?: Date;
 }
 
 export enum FileState {
   PREPARING = "PREPARING",
   CORRUPTED = "CORRUPTED",
   STABLE = "STABLE",
+  DELETED = "DELETED",
 }
 
 const MediaFileSchema = new Schema({
@@ -55,6 +58,14 @@ const MediaFileSchema = new Schema({
   },
   uploadDate: {
     type: Date,
+  },
+  deletionDate: {
+    type: Date,
+    default: null
+  },
+  lastAccessDate: {
+    type: Date,
+    default: Date.now,
   },
 });
 

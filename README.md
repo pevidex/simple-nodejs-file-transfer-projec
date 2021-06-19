@@ -4,7 +4,7 @@
 
 ### Why this project?
 
-This project serves as a proof of concept to greater projects. I wanted to learn the capabilities of Nodejs to handle files.
+This project serves as a proof of concept for greater projects. I wanted to learn the capabilities of Nodejs to handle files.
 
 ## Requirements
 
